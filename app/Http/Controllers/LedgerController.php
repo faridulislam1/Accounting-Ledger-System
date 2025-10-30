@@ -40,11 +40,32 @@ class LedgerController extends Controller
     {
         try {
             $reportData = Ledger::getFacadeRoot()->generateReport((int) $accountId);
-            $transactions = Account::findOrFail($accountId)->transactions()->latest()->get(); // সব Transaction
+            $transactions = Account::findOrFail($accountId)->transactions()->latest()->get(); 
             return view('ledger.report', compact('reportData', 'transactions'));
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['error' => 'Account not found'], 404);
+        }
+    }
+
+
+
+   // for Api
+
+
+   public function getReportJson($accountId)
+    {
+        try {
+            $reportData = Ledger::getFacadeRoot()->generateReport((int) $accountId);
+            return response()->json([
+                'status' => 'success',
+                'report' => $reportData 
+            ]);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Account not found'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An unexpected error occurred'], 500);
         }
     }
 }

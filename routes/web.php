@@ -3,16 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LedgerController;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,6 +20,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
+//ledger routes
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/ledger', [LedgerController::class, 'index'])->name('ledger.index');
@@ -37,6 +29,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ledger/report/{account_id}', [LedgerController::class, 'report'])
         ->name('ledger.report')
         ->where('account_id', '[0-9]+');
+
+//for api ledger report
+    Route::get('/ledgers/report/{account_id}', [LedgerController::class, 'getReportJson']);
+        
 });
 
 
